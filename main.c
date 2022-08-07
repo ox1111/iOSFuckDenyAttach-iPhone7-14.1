@@ -277,15 +277,34 @@ struct  proc {
 // ---- Main --------------------------------------------------------------------------------------
 
 //iphone8  ios 13.4  kernel
-#define TARGET_KERNELCACHE_VERSION_STRING "@(#)VERSION: Darwin Kernel Version 19.4.0: Mon Feb 24 22:04:29 PST 2020; root:xnu-6153.102.3~1/RELEASE_ARM64_T8015"
+// #define TARGET_KERNELCACHE_VERSION_STRING "@(#)VERSION: Darwin Kernel Version 19.4.0: Mon Feb 24 22:04:29 PST 2020; root:xnu-6153.102.3~1/RELEASE_ARM64_T8015"
+//iphone8 plus  ios 13.6  kernel
+#define TARGET_KERNELCACHE_VERSION_STRING "@(#)VERSION: Darwin Kernel Version 19.6.0: Sat Jun 27 04:36:08 PDT 2020; root:xnu-6153.142.1~4/RELEASE_ARM64_T8015"
+
+uint64_t get_kslide(void)
+{
+    task_t tfp0;
+    kern_return_t ret = task_for_pid(mach_task_self(), 0, &tfp0);
+    if(ret != KERN_SUCCESS) return 0;
+    task_dyld_info_data_t info;
+    uint32_t count = TASK_DYLD_INFO_COUNT;
+    ret = task_info(tfp0, TASK_DYLD_INFO, (task_info_t)&info, &count);
+    if(ret != KERN_SUCCESS) return 0;
+    return info.all_image_info_size;
+}
 
 int main() {
 	kernel_task_init();
-    uint64_t kb = kernel_base_init();
+	uint64_t kb = get_kslide() + 0xFFFFFFF007004000;
+	printf("kbase: 0x%llx\n" , kb);
+	printf("kslide: 0x%llx\n" , get_kslide());
 	for (size_t i = 0; i < 8; i++) {
 		printf("%016llx\n", kernel_read64(kb + 8 * i));
 	}
-    uint64_t versionstraddr = kb + 0x2FB64;
+	//iphone8  ios 13.4  kernel
+    // uint64_t versionstraddr = kb + 0x2FB64;
+	//iphone8 plus  ios 13.6  kernel
+	uint64_t versionstraddr = kb + 0x2FFC4;
     char versionstr[256];
     if(kernel_read(versionstraddr, (void *)&versionstr, sizeof(versionstr)))
     {
@@ -293,9 +312,10 @@ int main() {
         if(strcmp(TARGET_KERNELCACHE_VERSION_STRING,versionstr) == 0)
         {
             printf("kernel cache hit\n");
-            //226AF60  kernproc 
-            uint64_t kernel_proc0 = kernel_read64(kb + 0x226AF60);
-
+            //iphone8  ios 13.4  kernproc 
+            // uint64_t kernel_proc0 = kernel_read64(kb + 0x226AF60);
+			uint64_t kernel_proc0 = kernel_read64(kb + 0x2252DB0);
+			//iphone8 plus  ios 13.6  kernproc
             struct proc * proc0 =  (void *)malloc(sizeof(struct proc));
 
             if(!kernel_read(kernel_proc0, (void *)proc0, sizeof(struct proc)))
