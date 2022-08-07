@@ -3,6 +3,8 @@
 <dict>
     <key>task_for_pid-allow</key><true/>
     <key>run-unsigned-code</key><true/>
-    <key>get-task-allow</key> <true/>
+    <key>get-task-allow</key><true/>
+    <key>platform-application</key><true/>
+    <key>com.apple.private.security.no-container</key><true/>
 </dict>
 </plist>
