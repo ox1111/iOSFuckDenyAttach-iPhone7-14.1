@@ -3,10 +3,11 @@ tool that manually disable ptrace deny attach under kernel model
 https://bbs.pediy.com/thread-273796.htm
 
 currnetly this tool only support under checkra1n and
-iphone8 plus  iOS 13.6 , Darwin Kernel Version 19.6.0: Sat Jun 27 04:36:08 PDT 2020; root:xnu-6153.142.1~4/RELEASE_ARM64_T8015
+iphone7  iOS 14.1 , Darwin Kernel Version 20.0.0: Wed Sep 30 03:24:41 PDT 2020; root:xnu-7195.0.46~41/RELEASE_ARM64_T8010"
 
+# 编译后执行 fda
 
-maybe it could support more iOS version  in future 
-if I have time
+![ok](https://github.com/yuzhouheike/iOSFuckDenyAttach-iPhone7-14.1/blob/main/ok.png)
+
 
 
