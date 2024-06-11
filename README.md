@@ -266,9 +266,13 @@ pid_t           p_sessionid;
 
 修改完后 debugserver附加目标app后手机重启了
 
+
 zai 
+
+
+![](./1.se1.webp)
 
 
 在大佬的帮助下成功了
 
-
+![](./2.se2.webp)
